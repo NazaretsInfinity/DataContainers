@@ -59,8 +59,20 @@ public:
 	{
 			Element* last = Head;
 			while (last->pNext->pNext)last = last->pNext;
+			delete last->pNext;
 			last->pNext = nullptr;
+	}
 
+	void insert(int Data, int num)
+	{
+		Element* New = new Element(Data);
+		Element* front = Head;
+		for (int i = 1; i < num; i++)
+		{
+			front = front->pNext;
+		}
+		New->pNext = front->pNext;
+		front->pNext = New;
 	}
 	// methods
 	void print()const
@@ -84,6 +96,8 @@ void main()
 		list.push_back(rand() % 100);
 	}
 	list.print();
-	list.pop_back(); cout << "\n\n";
+	//list.pop_front();
+	//list.pop_back(); cout << "\n\n";
+	list.insert(666,3); cout << "\n\n";
 	list.print();
 }
