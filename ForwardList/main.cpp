@@ -45,12 +45,23 @@ public:
 		if (Head == nullptr)Head = New;
 		else
 		{
-			Element* last=Head;
-			while (last->pNext)last=last->pNext;
+			Element* last = Head;
+			while (last->pNext)last = last->pNext;
 			last->pNext = New;
 		}
 	}
+	void pop_front()
+	{
+		Head->~Element();
+		Head = Head->pNext;
+	}
+	void pop_back()
+	{
+			Element* last = Head;
+			while (last->pNext->pNext)last = last->pNext;
+			last->pNext = nullptr;
 
+	}
 	// methods
 	void print()const
 	{
@@ -70,8 +81,9 @@ void main()
 	ForwardList list;
 	for (int i = 0; i < n; i++)
 	{
-		//list.push_front(rand() % 100);
 		list.push_back(rand() % 100);
 	}
+	list.print();
+	list.pop_back(); cout << "\n\n";
 	list.print();
 }
