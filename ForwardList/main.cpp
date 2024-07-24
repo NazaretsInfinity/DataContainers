@@ -65,14 +65,18 @@ public:
 
 	void insert(int Data, int num)
 	{
-		Element* New = new Element(Data);
-		Element* front = Head;
-		for (int i = 1; i < num; i++)
+		if (num==0)push_front(Data);
+		else
 		{
-			front = front->pNext;
+			Element* New = new Element(Data);
+			Element* front = Head;
+			for (int i = 0; i < num - 1; i++)
+			{
+				front = front->pNext;
+			}
+			New->pNext = front->pNext;
+			front->pNext = New;
 		}
-		New->pNext = front->pNext;
-		front->pNext = New;
 	}
 	// methods
 	void print()const
@@ -96,8 +100,9 @@ void main()
 		list.push_back(rand() % 100);
 	}
 	list.print();
-	//list.pop_front();
-	//list.pop_back(); cout << "\n\n";
-	list.insert(666,3); cout << "\n\n";
+	list.insert(666,0); cout << "\n\n";
+	list.pop_front();
+	list.insert(666,7); cout << "\n\n";
+	list.pop_back(); cout << "\n\n";
 	list.print();
 }
