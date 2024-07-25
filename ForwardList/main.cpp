@@ -15,6 +15,14 @@ public:
 	{
 		cout << "EDestructor:\t" << this << endl;
 	}
+	int getDATA()const
+	{
+		return Data;
+	}
+	Element* getNELEMENT()
+	{
+		return pNext;
+	}
 	friend class ForwardList;
 };
 class ForwardList
@@ -148,16 +156,21 @@ public:
 			Temp = Temp->pNext; // move on next element 
 		}
 	}
-	int& operator[](int num)
+	Element& operator[](int num)
 	{    
 		Element* Temp = Head;
 		for (int i = 0; i < num; i++)
 		{
 			Temp = Temp->pNext;
 		}
-		return Temp->Data;
+		return *Temp;
 	}
 };
+std::ostream& operator <<(std::ostream& os, Element& el)
+{
+	os << &el << tab << el.getDATA() << tab << el.getNELEMENT() << endl;
+	return os;
+}
 #define checking
 void main()
 {
@@ -189,5 +202,6 @@ void main()
 	{
 		cout << list[i] << tab << endl;
 	}
+	list.print();
 	cout << "Size of list: " << list.size() << endl;
 }
