@@ -135,7 +135,7 @@ public:
 		}
 	}
 	// methods
-	int size()
+	int size()const
 	{
 		Element* Temp = Head;
 		int size = 0;
@@ -171,6 +171,17 @@ std::ostream& operator <<(std::ostream& os, Element& el)
 	os << &el << tab << el.getDATA() << tab << el.getNELEMENT() << endl;
 	return os;
 }
+
+ForwardList operator+(ForwardList& A, ForwardList& B)
+{
+	ForwardList C;
+	for (int i = 0; i < A.size()+B.size(); i++)
+	{
+		if (i >= A.size())C.push_back(B[i-A.size()].getDATA());
+		else C.push_back(A[i].getDATA());
+	}
+	return C;
+}
 #define checking
 void main()
 {
@@ -194,14 +205,20 @@ void main()
 	list.erase(s);
 	list.print();
 #endif 
+#ifdef checking2
 	int n;
 	cout << "Enter the amount of elements: "; cin >> n;
-	ForwardList list(n);
-	//list.print();
+	ForwardList list(5);
 	for (int i = 0; i < list.size(); i++)
 	{
 		cout << list[i] << tab << endl;
 	}
 	list.print();
-	cout << "Size of list: " << list.size() << endl;
+#endif 
+	ForwardList list1(5);
+	list1.print();
+	ForwardList list2(3);
+	list2.print();
+	ForwardList list3 = list1 + list2;
+	list3.print();
 }
