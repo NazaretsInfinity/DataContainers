@@ -15,14 +15,6 @@ public:
 	{
 		cout << "EDestructor:\t" << this << endl;
 	}
-	int getDATA()const
-	{
-		return Data;
-	}
-	Element* getNELEMENT()
-	{
-		return pNext;
-	}
 	friend class ForwardList;
 };
 class ForwardList
@@ -156,29 +148,23 @@ public:
 			Temp = Temp->pNext; // move on next element 
 		}
 	}
-	Element& operator[](int num)
+	int& operator[](int num)
 	{    
 		Element* Temp = Head;
 		for (int i = 0; i < num; i++)
 		{
 			Temp = Temp->pNext;
 		}
-		return *Temp;
+		return Temp->Data;
 	}
 };
-std::ostream& operator <<(std::ostream& os, Element& el)
-{
-	os << &el << tab << el.getDATA() << tab << el.getNELEMENT() << endl;
-	return os;
-}
-
 ForwardList operator+(ForwardList& A, ForwardList& B)
 {
 	ForwardList C;
 	for (int i = 0; i < A.size()+B.size(); i++)
 	{
-		if (i >= A.size())C.push_back(B[i-A.size()].getDATA());
-		else C.push_back(A[i].getDATA());
+		if (i >= A.size())C.push_back(B[i-A.size()]);
+		else C.push_back(A[i]);
 	}
 	return C;
 }
@@ -208,18 +194,18 @@ void main()
 #ifdef checking2
 	int n;
 	cout << "Enter the amount of elements: "; cin >> n;
-	ForwardList list(5);
+	ForwardList list(n);
 	for (int i = 0; i < list.size(); i++)
-	{
-		cout << list[i] << tab << endl;
-	}
+		cout << list[i] << tab;
+	cout << endl;
 	list.print();
 #endif 
-#ifdef checking
+#ifdef checking3
 	ForwardList list1(5);
 	list1.print();
 	ForwardList list2(3);
 	list2.print();
 	ForwardList list3 = list1 + list2;
+	list3.print();
 #endif 
 }
