@@ -7,7 +7,7 @@ class Element
 	int Data;
 	Element* pNext; // p - pointer. Next - next element
 public:
-	Element(int Data, Element* pNExt = nullptr) : Data(Data), pNext(pNext)
+	Element(int Data, Element* pNext = nullptr) : Data(Data), pNext(pNext)
 	{
 		cout << "EConstructor:\t" << this << endl;
 	}
@@ -47,7 +47,7 @@ public:
 	explicit ForwardList(int size) : ForwardList() 
 	{
 		this->size = size;
-		while (--size)push_front(0);
+		while (size--)push_front(0);
 		cout << "ListBySize-Constructor:\t" << this << endl;
 	}
 	// COPY 
@@ -91,22 +91,20 @@ public:
 	 // Adding elements
 	void push_front(int Data)
 	{
-		//1) created new element; 
-		Element* New = new Element(Data);
-		//2) Dock new element to the start of list
+	    /*Element* New = new Element(Data);
 		New->pNext = Head;	
-		Head = New;
+		Head = New;*/
+		Head = new Element(Data, Head);
 		size++;
 	}
 	void push_back(int Data)
 	{
-		Element* New = new Element(Data);
 		// since push back can't work with emptry list, we have to check if it's empty(then we call push_front instead, 'cause it's able to do it)
 		if (!Head)return push_front(Data);
 	
 			Element* last = Head;
 			while (last->pNext)last = last->pNext;
-			last->pNext = New;
+			last->pNext = new Element(Data);
 			size++;
 	}
 	void pop_front()
@@ -135,19 +133,17 @@ public:
 			cout << "index's out of range" << endl;
 			return;
 		}
-		if (num==0)push_front(Data);
-		else
-		{
-			Element* New = new Element(Data);
+		if (num==0)return push_front(Data);
+
+
+			//Element* New = new Element(Data);
 			Element* front = Head;
 			for (int i = 0; i < num - 1; i++)
 			{
 				//if (!front->pNext) break;
 					front = front->pNext;
 			}
-				New->pNext = front->pNext;
-				front->pNext = New;
-		}
+			front->pNext = new Element(Data, front->pNext);
 		size++;
 	}
 	void erase(int num)
@@ -236,7 +232,7 @@ void main()
 	}
 	list.print();
 #endif 
-#ifdef checking
+#ifdef checking3
 	ForwardList list1(5);
 	list1.print();
 	ForwardList list2(3);
@@ -244,5 +240,9 @@ void main()
 	ForwardList list3 = list1 + list2;
 	list3.print();
 #endif 
-	
+	ForwardList list(0);
+	list.push_front(1);
+	list.push_front(1);
+	list.push_front(1);
+	list.print();
 }
