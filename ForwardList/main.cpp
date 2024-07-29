@@ -165,7 +165,7 @@ public:
 			Temp = Temp->pNext; // move on next element 
 		}
 	}
-	int& operator[](int num)const
+	const int& operator[](int num)const
 	{    
 		Element* Temp = Head;
 		for (int i = 0; i < num; i++)
