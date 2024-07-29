@@ -40,11 +40,13 @@ public:
 	}
 	ForwardList() // default constructor , creating an empty list
 	{
+		size = 0;
 		Head = nullptr;
 		cout << "LConstructor:\t" << this << endl;
 	}
-	explicit ForwardList(int size) : ForwardList()
+	explicit ForwardList(int size) : ForwardList() 
 	{
+		this->size = size;
 		while (--size)push_front(0);
 		cout << "ListBySize-Constructor:\t" << this << endl;
 	}
@@ -195,14 +197,11 @@ public:
 		return Temp->Data;
 	}
 };
-ForwardList operator+(const ForwardList& A, const ForwardList& B)
+ForwardList operator+(ForwardList A, ForwardList B)
 {
 	ForwardList C;
-	for (int i = 0; i < A.getsize()+B.getsize(); i++)
-	{
-		if (i >= A.getsize())C.push_back(B[i-A.getsize()]);
-		else C.push_back(A[i]);
-	}
+	for (int i = 0; i < A.getsize(); i++)C.push_back(A[i]);
+	for (int i = 0; i < B.getsize(); i++)C.push_back(B[i]);
 	return C;
 }
 #define checking
@@ -243,6 +242,7 @@ void main()
 	ForwardList list2(3);
 	list2.print();
 	ForwardList list3 = list1 + list2;
+	list3.print();
 #endif 
 	
 }
