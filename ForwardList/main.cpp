@@ -46,7 +46,6 @@ public:
 	}
 	explicit ForwardList(int size) : ForwardList() 
 	{
-		this->size = size;
 		while (size--)push_front(0);
 		cout << "ListBySize-Constructor:\t" << this << endl;
 	}
@@ -99,9 +98,8 @@ public:
 	}
 	void push_back(int Data)
 	{
-		// since push back can't work with emptry list, we have to check if it's empty(then we call push_front instead, 'cause it's able to do it)
 		if (!Head)return push_front(Data);
-	
+
 			Element* last = Head;
 			while (last->pNext)last = last->pNext;
 			last->pNext = new Element(Data);
@@ -193,7 +191,7 @@ public:
 		return Temp->Data;
 	}
 };
-ForwardList operator+(ForwardList A, ForwardList B)
+ForwardList operator+(const ForwardList& A,const ForwardList& B)
 {
 	ForwardList C;
 	for (int i = 0; i < A.getsize(); i++)C.push_back(A[i]);
@@ -232,7 +230,7 @@ void main()
 	}
 	list.print();
 #endif 
-#ifdef checking3
+#ifdef checking
 	ForwardList list1(5);
 	list1.print();
 	ForwardList list2(3);
@@ -240,9 +238,5 @@ void main()
 	ForwardList list3 = list1 + list2;
 	list3.print();
 #endif 
-	ForwardList list(0);
-	list.push_front(1);
-	list.push_front(1);
-	list.push_front(1);
-	list.print();
+	
 }
