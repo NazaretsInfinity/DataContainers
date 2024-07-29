@@ -27,46 +27,66 @@ public:
 };
 class ForwardList
 {
+	int size;
 	Element* Head; // head of list, pointing at first element 
 public:
 	const int& getHead()const
 	{
 		return Head->Data;
 	}
+	int getsize()const
+	{
+		return size;
+	}
 	ForwardList() // default constructor , creating an empty list
 	{
 		Head = nullptr;
 		cout << "LConstructor:\t" << this << endl;
 	}
-	ForwardList(int size)
+	explicit ForwardList(int size) : ForwardList()
 	{
-		Head = nullptr;
-		if (size != 0)
-		{
-			Element* New = new Element(rand() % 100);
-			Head = New;
-			Element* Temp = Head;
-			for (int i = 0; i < size-1; i++)
-			{
-				Element* New = new Element(rand() % 100);
-				Temp->pNext = New;
-				Temp = Temp->pNext;
-			}
-		}
+		while (--size)push_front(0);
 		cout << "ListBySize-Constructor:\t" << this << endl;
+	}
+	// COPY 
+	ForwardList(const ForwardList& other) : ForwardList()
+	{
+		*this = other;
+		cout << "CopyConstructor: " << this << endl;
+	}
+	 // MOVE
+	ForwardList(ForwardList&& other) : ForwardList()
+	{
+		*this = std::move(other);
+		cout << "MoveConstructor: " << this << endl;
 	}
 	~ForwardList()
 	{
-		Element* Temp = Head;
-		while (Temp)
-		{
-			Element* buf = Temp;
-			Temp = Temp->pNext;
-			delete buf;
-		}
+		while (Head)pop_back();
 		cout << "LDestructor:\t" << this << endl;
 	}
-	 //               Adding elements
+	// OPERARORS 
+
+	ForwardList& operator=(const ForwardList& other)
+	{
+		if (this == &other)return *this;
+		this->~ForwardList();
+		for (Element* Temp = other.Head; Temp; Temp = Temp->pNext)
+			push_back(Temp->Data);
+		cout << "CopyAssignment: " << this << endl;
+		return *this;
+	}
+	ForwardList& operator =(ForwardList&& other)
+	{
+		if (this == &other)return *this;
+		this->~ForwardList();
+		this->Head = other.Head;
+		this->size = other.size;
+		other.Head = nullptr;
+		other.size = 0;
+		return *this;
+	}
+	 // Adding elements
 	void push_front(int Data)
 	{
 		//1) created new element; 
@@ -135,17 +155,6 @@ public:
 		}
 	}
 	// methods
-	int size()const
-	{
-		Element* Temp = Head;
-		int size = 0;
-		while (Temp)
-		{
-			size++;
-			Temp = Temp->pNext;
-		}
-		return size;
-	}
 	void print()const
 	{
 		Element* Temp = Head; // Temp - iterator. It's a pointer with one you can get access to element;
@@ -156,36 +165,38 @@ public:
 			Temp = Temp->pNext; // move on next element 
 		}
 	}
-	Element& operator[](int num)
+	int& operator[](int num)const
 	{    
 		Element* Temp = Head;
 		for (int i = 0; i < num; i++)
 		{
 			Temp = Temp->pNext;
 		}
-		return *Temp;
+		return Temp->Data;
+	}
+	int& operator[](int num)
+	{
+		Element* Temp = Head;
+		for (int i = 0; i < num; i++)
+		{
+			Temp = Temp->pNext;
+		}
+		return Temp->Data;
 	}
 };
-std::ostream& operator <<(std::ostream& os, Element& el)
-{
-	os << &el << tab << el.getDATA() << tab << el.getNELEMENT() << endl;
-	return os;
-}
-
-ForwardList operator+(ForwardList& A, ForwardList& B)
+ForwardList operator+(const ForwardList& A, const ForwardList& B)
 {
 	ForwardList C;
-	for (int i = 0; i < A.size()+B.size(); i++)
+	for (int i = 0; i < A.getsize()+B.getsize(); i++)
 	{
-		if (i >= A.size())C.push_back(B[i-A.size()].getDATA());
-		else C.push_back(A[i].getDATA());
+		if (i >= A.getsize())C.push_back(B[i-A.getsize()]);
+		else C.push_back(A[i]);
 	}
 	return C;
 }
 #define checking
 void main()
 {
-
 #ifdef checking1
 	int n;
 	cout << "Enter the amount of elements: "; cin >> n;
@@ -222,4 +233,5 @@ void main()
 	list2.print();
 	ForwardList list3 = list1 + list2;
 #endif 
+	
 }
