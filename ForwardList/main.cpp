@@ -94,6 +94,7 @@ public:
 		//2) Dock new element to the start of list
 		New->pNext = Head;	
 		Head = New;
+		size++;
 	}
 	void push_back(int Data)
 	{
@@ -104,26 +105,34 @@ public:
 			Element* last = Head;
 			while (last->pNext)last = last->pNext;
 			last->pNext = New;
+			size++;
 	}
 	void pop_front()
 	{
 		Element* head = Head;
 		Head = Head->pNext;
 		delete head;
+		size--;
 	}
 	void pop_back()
 	{
+			if (!Head->pNext)return pop_front();
 			Element* last = Head;
-			if (!last->pNext)pop_front();
-			else {
+			
 				while (last->pNext->pNext)last = last->pNext;
 				delete last->pNext;
 				last->pNext = nullptr;
-			}
+			
+			size--;
 	}
 
 	void insert(int Data, int num)
 	{
+		if (num > size)
+		{
+			cout << "index's out of range" << endl;
+			return;
+		}
 		if (num==0)push_front(Data);
 		else
 		{
@@ -131,12 +140,13 @@ public:
 			Element* front = Head;
 			for (int i = 0; i < num - 1; i++)
 			{
-				if (!front->pNext) break;
+				//if (!front->pNext) break;
 					front = front->pNext;
 			}
 				New->pNext = front->pNext;
 				front->pNext = New;
 		}
+		size++;
 	}
 	void erase(int num)
 	{
@@ -153,6 +163,7 @@ public:
 				front->pNext = todel->pNext;
 				delete todel;
 		}
+		size--;
 	}
 	// methods
 	void print()const
