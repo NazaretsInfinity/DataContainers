@@ -7,6 +7,10 @@ class Element
 	int Data;
 	Element* pNext; // p - pointer. Next - next element
 public:
+	operator int()
+	{
+		return Data;
+	}
 	Element(int Data, Element* pNext = nullptr) : Data(Data), pNext(pNext)
 	{
 		cout << "EConstructor:\t" << this << endl;
@@ -30,6 +34,14 @@ class ForwardList
 	int size;
 	Element* Head; // head of list, pointing at first element 
 public:
+	Element* begin()const 
+	{
+		return Head;
+	}
+	Element* end()const 
+	{
+		return nullptr;
+	}
 	const int& getHead()const
 	{
 		return Head->Data;
@@ -60,6 +72,12 @@ public:
 	{
 		*this = std::move(other);
 		cout << "MoveConstructor: " << this << endl;
+	}
+	// ForwardList list =  {3,5,8} case 
+	ForwardList(const initializer_list<int>& il) : ForwardList()
+	{
+		for (const int* it = il.begin(); it != il.end(); it++)push_back(*it);
+
 	}
 	~ForwardList()
 	{
@@ -230,7 +248,7 @@ void main()
 	}
 	list.print();
 #endif 
-#ifdef checking
+#ifdef checking3
 	ForwardList list1(5);
 	list1.print();
 	ForwardList list2(3);
@@ -238,5 +256,18 @@ void main()
 	ForwardList list3 = list1 + list2;
 	list3.print();
 #endif 
-	
+	int arr[] = { 3,5,8,13,21 };
+	//Range-based for:
+	for (int i : arr)
+	{
+		cout << i << tab;
+	}
+	// Range is a container
+	//It means, containers sometimes are being called "range"
+	// Therefore, 'Range-based for' is a loop 'for' for container
+	ForwardList list = { 3,5,8,13,21 };
+	for (int i : list)
+	{
+		cout << i << tab;
+	}
 }
