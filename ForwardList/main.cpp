@@ -28,17 +28,56 @@ public:
 		return pNext;
 	}
 	friend class ForwardList;
+	friend class Iterator;
 };
+
+class Iterator
+{
+	Element* ptr;
+public: 
+	Iterator(Element* p = nullptr) : ptr(p) {cout << "Iconstructor: " << this << endl; }
+	~Iterator(){ cout << "Idestructor: " << this << endl; }
+	bool operator==(const Iterator& other)const
+	{
+		return (this->ptr == other.ptr);
+	}
+	bool operator!=(const Iterator& other)const
+	{
+		return this->ptr != other.ptr;
+	}
+	Iterator& operator++()
+	{
+		this->ptr = ptr->pNext;
+		return *this;
+	}
+	Iterator operator++(int)
+	{
+		Iterator old = ptr;
+		ptr = ptr->pNext;
+		return old;
+	}
+	int& operator*()const
+	{
+		return ptr->Data; 
+	}
+	int operator*()
+	{
+		return ptr->Data;
+	}
+	friend class ForwardList;
+};
+
+
 class ForwardList
 {
 	int size;
 	Element* Head; // head of list, pointing at first element 
 public:
-	Element* begin()const 
+	Iterator begin()const 
 	{
 		return Head;
 	}
-	Element* end()const 
+	Iterator end()const 
 	{
 		return nullptr;
 	}
@@ -77,7 +116,6 @@ public:
 	ForwardList(const initializer_list<int>& il) : ForwardList()
 	{
 		for (const int* it = il.begin(); it != il.end(); it++)push_back(*it);
-
 	}
 	~ForwardList()
 	{
@@ -216,6 +254,7 @@ ForwardList operator+(const ForwardList& A,const ForwardList& B)
 	for (int i = 0; i < B.getsize(); i++)C.push_back(B[i]);
 	return C;
 }
+
 #define checking
 void main()
 {
@@ -256,6 +295,7 @@ void main()
 	ForwardList list3 = list1 + list2;
 	list3.print();
 #endif 
+#ifdef checking4
 	int arr[] = { 3,5,8,13,21 };
 	//Range-based for:
 	for (int i : arr)
@@ -270,4 +310,11 @@ void main()
 	{
 		cout << i << tab;
 	}
+	cout << endl;
+	for (auto it = list.begin(); it != list.end(); ++it)
+	{
+		cout << *it << tab;
+	}
+#endif // checking4
+
 }
