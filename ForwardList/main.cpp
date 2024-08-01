@@ -316,5 +316,8 @@ void main()
 		cout << *it << tab;
 	}
 #endif // checking4
-
+	ForwardList list = { 3 };
+	list.print();
+	list.pop_front();
+	list.print();
 }
