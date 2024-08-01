@@ -81,8 +81,37 @@ public:
 		delete buffer;
 		size--;
 	}
-
+	void insert(int Data, int num)
+	{
+		if (num >= size)return push_back(Data);
+		if (num == 0)return push_front(Data);
+		Element* Temp = Head;
+		if (num <= size/ 2)
+			for (int i = 0; i < num; i++)
+				Temp = Temp->pNext;
+		else
+		{
+			Temp = Tail;
+			for (int i = size; i > num+1; i--)
+				Temp = Temp->pPrev;
+		}
+		Temp->pPrev->pNext = new Element(Data, Temp, Temp->pPrev);
+		Temp->pPrev = Temp->pPrev->pNext;
+		size++;
+	}
+	void erase(int num)
+	{
+	}
 	// METHODS 
+	void reverse_print()const
+	{
+		for (Element* Temp = Tail; Temp; Temp = Temp->pPrev)
+		{
+			cout << Temp->pNext << tab << Temp << tab << Temp->Data << tab << Temp->pPrev << endl;
+
+		}
+			cout << "Amount of elements: " << size << endl;
+	}
 	void print()const
 	{
 		for (Element* Temp = Head; Temp; Temp = Temp->pNext)
@@ -94,6 +123,7 @@ public:
 };
 void main()
 {
+	int s;
 	setlocale(LC_ALL, "");
 	List list; 
 	list.push_back(0);
@@ -101,11 +131,12 @@ void main()
 	list.push_back(2);
 	list.push_back(3);
 	list.push_back(4);
+	list.push_back(5);
+	list.push_back(6);
+	list.push_back(7);
+	list.push_back(8);
 	list.print();
-	list.pop_back();
-	list.pop_back();
-	list.pop_back();
-	list.pop_back();
-	list.pop_back();
+	cout << "Enter number of the element to add: "; cin >> s;
+	list.insert(666,s);
 	list.print();
 }

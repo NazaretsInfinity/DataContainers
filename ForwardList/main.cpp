@@ -176,7 +176,6 @@ public:
 				while (last->pNext->pNext)last = last->pNext;
 				delete last->pNext;
 				last->pNext = nullptr;
-			
 			size--;
 	}
 
