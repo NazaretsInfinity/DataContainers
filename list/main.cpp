@@ -92,7 +92,7 @@ public:
 		else
 		{
 			Temp = Tail;
-			for (int i = size; i > num+1; i--)
+			for (int i = num; i < size-1; i++)
 				Temp = Temp->pPrev;
 		}
 		Temp->pPrev->pNext = new Element(Data, Temp, Temp->pPrev);
@@ -101,6 +101,22 @@ public:
 	}
 	void erase(int num)
 	{
+		if (num >= size)return;
+		if (num == 0)return pop_front();
+		Element* Temp = Head;
+		if (num <= size / 2)
+			for (int i = 0; i < num; i++)
+				Temp = Temp->pNext;
+		else
+		{
+			Temp = Tail;
+			for (int i = num; i < size - 1; i++)
+				Temp = Temp->pPrev;
+		}
+		Temp->pNext->pPrev = Temp->pPrev;
+		Temp->pPrev->pNext = Temp->pNext;
+		delete Temp;
+		size--;
 	}
 	// METHODS 
 	void reverse_print()const
@@ -138,5 +154,8 @@ void main()
 	list.print();
 	cout << "Enter number of the element to add: "; cin >> s;
 	list.insert(666,s);
+	list.print();
+	cout << "Enter number of the element to delete: "; cin >> s;
+	list.erase(s);
 	list.print();
 }
