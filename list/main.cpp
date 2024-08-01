@@ -32,8 +32,13 @@ public:
 		size = 0;
 		cout << "LConstructor:\t" << this << endl;
 	}
+	List(const initializer_list<int>& il) : List()
+	{
+		for (auto it: il)push_back(it);
+	}
 	~List()
 	{
+		while (Head && Tail)pop_front();
 		cout << "LDestructor:\t" << this << endl;
 	}
 	 // ADDING ELEMENTS
@@ -101,8 +106,8 @@ public:
 	}
 	void erase(int num)
 	{
-		if (num >= size)return;
-		if (num == 0)return pop_front();
+		if (num >= size-1)return pop_back();
+		if (num==0)return pop_front();
 		Element* Temp = Head;
 		if (num <= size / 2)
 			for (int i = 0; i < num; i++)
@@ -137,25 +142,22 @@ public:
 			cout << "Amount of elements: " << size << endl;
 	}
 };
+#define checking
 void main()
 {
-	int s;
 	setlocale(LC_ALL, "");
-	List list; 
+#ifdef checking1
+	int s;
+	List list;
 	list.push_back(0);
 	list.push_back(1);
-	list.push_back(2);
-	list.push_back(3);
-	list.push_back(4);
-	list.push_back(5);
-	list.push_back(6);
-	list.push_back(7);
-	list.push_back(8);
-	list.print();
 	cout << "Enter number of the element to add: "; cin >> s;
-	list.insert(666,s);
+	list.insert(666, s);
 	list.print();
 	cout << "Enter number of the element to delete: "; cin >> s;
 	list.erase(s);
+	list.print();
+#endif 
+	List list = {3,5,8,13,21};
 	list.print();
 }
