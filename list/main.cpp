@@ -1,6 +1,7 @@
 #include<iostream>
 using namespace std;
 #define tab '\t'
+class Element;
 class List
 {
 	class Element
@@ -23,9 +24,52 @@ class List
 		// typedef have this syntax:
 		// typedef (type) nickname 
 		friend class List;
+		friend class Iterator;
 	}*Head, * Tail;
 	size_t size;
+
+
+	class Iterator
+	{
+		Element* it;
+	public:
+		Iterator(Element* el = nullptr) : it(el) {}
+		~Iterator() {}
+		bool operator!=(const Iterator& other)
+		{
+			return this->it != other.it;
+		}
+		Iterator& operator++()
+		{
+			it = it->pNext;
+			return *this;
+		}
+		Iterator operator++(int)
+		{
+			Iterator old = it;
+			it = it->pNext;
+			return old;
+		}
+		int& operator*()const
+		{
+			return it->Data;
+		}
+		int operator*()
+		{
+			return it->Data;
+		}
+		friend class List;
+	};
+
 public:
+	Iterator begin()
+	{
+		return Iterator(Head);
+	}
+	Iterator end()
+	{
+		return nullptr;
+	}
 	List()
 	{
 		Head = Tail = nullptr;
@@ -175,7 +219,8 @@ void main()
 #endif 
 	List list = {3,5,8,13,21};
 	list.print();
-	list.pop_front();
-	list.pop_back();
-	list.print();
+	for (int i: list)
+	{
+		cout << i << tab;
+	}cout << endl;
 }
