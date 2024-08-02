@@ -18,8 +18,8 @@ class List
 			cout << "EDestructor: " << this << endl;
 		}
 
-		//size_t is a 'typedef' on 'unsigned int' 
-		// typedef - derective , it creates a nickname for existing type of data(int ,etc)
+		//size_t is a 'typedef' for 'unsigned int' 
+		// typedef - directive , it creates a nickname for existing type of data(int ,etc)
 		// typedef have this syntax:
 		// typedef (type) nickname 
 		friend class List;
