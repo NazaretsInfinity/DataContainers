@@ -68,22 +68,37 @@ public:
 	}
 	void pop_front()
 	{
-		Element* buffer = Head;
-		Head->pPrev = nullptr;
-		Head = Head->pNext;
-		delete buffer;
+		if (!(Head && Tail))return;
+		if (Head == Tail)
+		{
+			delete Head;
+			Head = Tail = nullptr;
+		}
+		else
+		{
+			//1) move head on next element
+			Head = Head->pNext;
+			//2) delete this fignya
+			delete Head->pPrev;
+			//3) give fignya nullptr
+			Head->pPrev = nullptr;
+		}
 		size--;
 	}
 	void pop_back()
 	{
-		Element* buffer = Tail;
-		if (Tail->pPrev)
+		if (!(Head && Tail))return;
+		if (Head == Tail)
 		{
-			Tail->pPrev->pNext = nullptr;
-			Tail = Tail->pPrev;
+			delete Tail;
+			Head = Tail = nullptr;
 		}
-		else Head = Tail = nullptr;
-		delete buffer;
+		else
+		{
+			Tail = Tail->pPrev;
+			delete Tail->pNext;
+			Tail->pNext = nullptr;
+		}
 		size--;
 	}
 	void insert(int Data, int num)
@@ -159,5 +174,8 @@ void main()
 	list.print();
 #endif 
 	List list = {3,5,8,13,21};
+	list.print();
+	list.pop_front();
+	list.pop_back();
 	list.print();
 }
