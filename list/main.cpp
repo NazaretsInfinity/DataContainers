@@ -129,7 +129,13 @@ public:
 			return it->Data;
 		}
 	};
+
+
 	ConstReverseIterator rbegin()const
+	{
+		return Tail;
+	}
+	ReverseIterator rbegin()
 	{
 		return Tail;
 	}
@@ -137,11 +143,23 @@ public:
 	{
 		return nullptr;
 	}
+	ReverseIterator rend()
+	{
+		return nullptr;
+	}
 	ConstIterator begin()const
 	{
 		return Head;
 	}
+	Iterator begin()
+	{
+		return Head;
+	}
 	ConstIterator end()const
+	{
+		return nullptr;
+	}
+	Iterator end()
 	{
 		return nullptr;
 	}
