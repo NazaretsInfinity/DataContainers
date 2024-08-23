@@ -2,16 +2,18 @@
 using namespace std;
 #define tab "\t"
 #define delimeter "\n====================================\n"
+
+template<typename T>
 class Element
 {
-	int Data;
-	Element* pNext; // p - pointer. Next - next element
+	T Data;
+	Element<T>* pNext; // p - pointer. Next - next element
 public:
 	operator int()
 	{
 		return Data;
 	}
-	Element(int Data, Element* pNext = nullptr) : Data(Data), pNext(pNext)
+	Element(T Data, Element<T>* pNext = nullptr) : Data(Data), pNext(pNext)
 	{
 		cout << "EConstructor:\t" << this << endl;
 	}
@@ -19,23 +21,23 @@ public:
 	{
 		cout << "EDestructor:\t" << this << endl;
 	}
-	int getDATA()const
+	T getDATA()const
 	{
 		return Data;
 	}
-	Element* getNELEMENT()
+	Element<T>* getNELEMENT()
 	{
 		return pNext;
 	}
-	friend class ForwardList;
-	friend class Iterator;
+	template<typename T>friend class ForwardList;
+	template<typename T>friend class Iterator;
 };
 
-class Iterator
+template<typename T>class Iterator
 {
-	Element* ptr;
+	Element<T>* ptr;
 public: 
-	Iterator(Element* p = nullptr) : ptr(p) {cout << "Iconstructor: " << this << endl; }
+	Iterator(Element<T>* p = nullptr) : ptr(p) {cout << "Iconstructor: " << this << endl; }
 	~Iterator(){ cout << "Idestructor: " << this << endl; }
 	bool operator==(const Iterator& other)const
 	{
@@ -64,24 +66,24 @@ public:
 	{
 		return ptr->Data;
 	}
-	friend class ForwardList;
+	template<typename T>friend class ForwardList;
 };
 
-
+template<typename T>
 class ForwardList
 {
 	int size;
-	Element* Head; // head of list, pointing at first element 
+	Element<T>* Head; // head of list, pointing at first element 
 public:
-	Iterator begin()const 
+	Iterator<T> begin()const 
 	{
 		return Head;
 	}
-	Iterator end()const 
+	Iterator<T> end()const 
 	{
 		return nullptr;
 	}
-	const int& getHead()const
+	const T& getHead()const
 	{
 		return Head->Data;
 	}
@@ -101,21 +103,21 @@ public:
 		cout << "ListBySize-Constructor:\t" << this << endl;
 	}
 	// COPY 
-	ForwardList(const ForwardList& other) : ForwardList()
+	ForwardList(const ForwardList<T>& other) : ForwardList()
 	{
 		*this = other;
 		cout << "CopyConstructor: " << this << endl;
 	}
 	 // MOVE
-	ForwardList(ForwardList&& other) : ForwardList()
+	ForwardList(ForwardList<T>&& other) : ForwardList()
 	{
 		*this = std::move(other);
 		cout << "MoveConstructor: " << this << endl;
 	}
 	// ForwardList list =  {3,5,8} case 
-	ForwardList(const initializer_list<int>& il) : ForwardList()
+	ForwardList(const initializer_list<T>& il) : ForwardList()
 	{
-		for (const int* it = il.begin(); it != il.end(); it++)push_back(*it);
+		for (const T* it = il.begin(); it != il.end(); it++)push_back(*it);
 	}
 	~ForwardList()
 	{
@@ -124,7 +126,7 @@ public:
 	}
 	// OPERARORS 
 
-	ForwardList& operator=(const ForwardList& other)
+	ForwardList<T>& operator=(const ForwardList<T>& other)
 	{
 		if (this == &other)return *this;
 		this->~ForwardList();
@@ -133,7 +135,7 @@ public:
 		cout << "CopyAssignment: " << this << endl;
 		return *this;
 	}
-	ForwardList& operator =(ForwardList&& other)
+	ForwardList<T>& operator =(ForwardList<T>&& other)
 	{
 		if (this == &other)return *this;
 		this->~ForwardList();
@@ -144,26 +146,23 @@ public:
 		return *this;
 	}
 	 // Adding elements
-	void push_front(int Data)
+	void push_front(T Data)
 	{
-	    /*Element* New = new Element(Data);
-		New->pNext = Head;	
-		Head = New;*/
-		Head = new Element(Data, Head);
+		Head = new Element<T>(Data, Head);
 		size++;
 	}
-	void push_back(int Data)
+	void push_back(T Data)
 	{
 		if (!Head)return push_front(Data);
 
-			Element* last = Head;
+			Element<T>* last = Head;
 			while (last->pNext)last = last->pNext;
-			last->pNext = new Element(Data);
+			last->pNext = new Element<T>(Data);
 			size++;
 	}
 	void pop_front()
 	{
-		Element* head = Head;
+		Element<T>* head = Head;
 		Head = Head->pNext;
 		delete head;
 		size--;
@@ -171,7 +170,7 @@ public:
 	void pop_back()
 	{
 			if (!Head->pNext)return pop_front();
-			Element* last = Head;
+			Element<T>* last = Head;
 			
 				while (last->pNext->pNext)last = last->pNext;
 				delete last->pNext;
@@ -179,7 +178,7 @@ public:
 			size--;
 	}
 
-	void insert(int Data, int num)
+	void insert(T Data, int num)
 	{
 		if (num > size)
 		{
@@ -187,13 +186,10 @@ public:
 			return;
 		}
 		if (num==0)return push_front(Data);
-
-
-			//Element* New = new Element(Data);
 			Element* front = Head;
 			for (int i = 0; i < num - 1; i++)
 			{
-				//if (!front->pNext) break;
+				
 					front = front->pNext;
 			}
 			front->pNext = new Element(Data, front->pNext);
@@ -219,7 +215,7 @@ public:
 	// methods
 	void print()const
 	{
-		Element* Temp = Head; // Temp - iterator. It's a pointer with one you can get access to element;
+		Element<T>* Temp = Head; // Temp - iterator. It's a pointer with one you can get access to element;
 		cout << Head << delimeter;
 		while (Temp)
 		{
@@ -227,16 +223,16 @@ public:
 			Temp = Temp->pNext; // move on next element 
 		}
 	}
-	const int& operator[](int num)const
+	const T& operator[](int num)const
 	{    
-		Element* Temp = Head;
+		Element<T>* Temp = Head;
 		for (int i = 0; i < num; i++)
 		{
 			Temp = Temp->pNext;
 		}
 		return Temp->Data;
 	}
-	int& operator[](int num)
+	T& operator[](int num)
 	{
 		Element* Temp = Head;
 		for (int i = 0; i < num; i++)
@@ -246,9 +242,9 @@ public:
 		return Temp->Data;
 	}
 };
-ForwardList operator+(const ForwardList& A,const ForwardList& B)
+template<typename T> ForwardList<T> operator+(const ForwardList<T>& A,const ForwardList<T>& B)
 {
-	ForwardList C;
+	ForwardList<T> C;
 	for (int i = 0; i < A.getsize(); i++)C.push_back(A[i]);
 	for (int i = 0; i < B.getsize(); i++)C.push_back(B[i]);
 	return C;
@@ -286,12 +282,12 @@ void main()
 	}
 	list.print();
 #endif 
-#ifdef checking3
-	ForwardList list1(5);
+#ifdef checking
+	ForwardList<int> list1(5);
 	list1.print();
-	ForwardList list2(3);
+	ForwardList<int> list2(3);
 	list2.print();
-	ForwardList list3 = list1 + list2;
+	ForwardList<int> list3 = list1 + list2;
 	list3.print();
 #endif 
 #ifdef checking4
@@ -314,9 +310,5 @@ void main()
 	{
 		cout << *it << tab;
 	}
-#endif // checking4
-	ForwardList list = { 3 };
-	list.print();
-	list.pop_front();
-	list.print();
+#endif 
 }
