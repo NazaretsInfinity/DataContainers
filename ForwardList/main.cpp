@@ -215,12 +215,12 @@ public:
 	// methods
 	void print()const
 	{
-		Element<T>* Temp = Head; // Temp - iterator. It's a pointer with one you can get access to element;
+		Element<T>* Temp = Head; 
 		cout << Head << delimeter;
 		while (Temp)
 		{
 			cout << Temp << tab << Temp->Data << tab << Temp->pNext << "\n\n";
-			Temp = Temp->pNext; // move on next element 
+			Temp = Temp->pNext; 
 		}
 	}
 	const T& operator[](int num)const
