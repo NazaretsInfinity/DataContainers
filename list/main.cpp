@@ -79,40 +79,61 @@ public:
 			return old;
 		}
 	};
-	class ReverseIterator :public ConstBaseIterator
+	class ConstReverseIterator :public ConstBaseIterator
 	{
 	public:
-		ReverseIterator(Element* Temp = nullptr) : ConstBaseIterator(Temp){}
-		~ReverseIterator(){}
+		ConstReverseIterator(Element* Temp = nullptr) : ConstBaseIterator(Temp){}
+		~ConstReverseIterator(){}
 		// increment decrement
-		ReverseIterator& operator++()
+		ConstReverseIterator& operator++()
 		{
 			it = it->pPrev;
 			return *this;
 		}
-		ReverseIterator operator++(int)
+		ConstReverseIterator operator++(int)
 		{
-			ReverseIterator old = it;
+			ConstReverseIterator old = it;
 			it = it->pPrev;
 			return old;
 		}
-		ReverseIterator& operator--()
+		ConstReverseIterator& operator--()
 		{
 			it = it->pNext;
 			return *this;
 		}
-		ReverseIterator operator--(int)
+		ConstReverseIterator operator--(int)
 		{
-			ReverseIterator old = *this;
+			ConstReverseIterator old = *this;
 			it=it->pNext;
 			return old;
 		}
 	};
-	ReverseIterator rbegin()const
+	class Iterator : public ConstIterator
+	{
+	public:
+		Iterator(Element* it = nullptr):ConstIterator(it){}
+		~Iterator(){}
+		int& operator*()
+		{
+			return it->Data;
+		}
+	};
+
+	class ReverseIterator : public ConstReverseIterator
+	{
+	public:
+		ReverseIterator(Element* it = nullptr) :ConstReverseIterator(it) {}
+		~ReverseIterator() {}
+		int& operator*()
+		{
+			return it->Data;
+		}
+	};
+	ConstReverseIterator rbegin()const
 	{
 		return Tail;
 	}
-	ReverseIterator rend()const
+	ConstReverseIterator rend()const
 	{
 		return nullptr;
 	}
