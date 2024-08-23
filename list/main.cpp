@@ -306,7 +306,7 @@ public:
 template<typename T>List<T> operator+(const List<T>& left, const List<T>& right)
 {
 	List<T> buffer = left;
-	for (List::ConstIterator it = right.begin(); it != right.end(); ++it)
+	for (typename List<T>::ConstIterator it = right.begin(); it != right.end(); ++it)
 	{
 		buffer.push_back(*it);
 	}
@@ -330,12 +330,12 @@ void main()
 	list.print();
 #endif 
 #ifdef checking2
-	List list = { 3,5,8,13,21 };
-	for (List::Iterator it = list.begin(); it != list.end(); ++it)
+	List<double> list = { 3,5,8,13,21 };
+	for (List<double>::Iterator it = list.begin(); it != list.end(); ++it)
 	{
 		cout << *it << tab;
 	}cout << "\n\n";
-	for (List::ReverseIterator it = list.rbegin(); it != list.rend(); ++it)
+	for (List<double>::ReverseIterator it = list.rbegin(); it != list.rend(); ++it)
 	{
 		cout << *it << tab;
 	}cout << endl;
