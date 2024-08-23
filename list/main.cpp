@@ -24,118 +24,103 @@ class List
 		// typedef have this syntax:
 		// typedef (type) nickname 
 		friend class List;
-		friend class Iterator;
+		friend class ConstIterator;
 	}*Head, * Tail;
 	size_t size;
-public:
-	class Iterator
+
+	class ConstBaseIterator
 	{
+	protected:
 		Element* it;
-	public:
-		Iterator(Element* it = nullptr) : it(it) {}
-		~Iterator() {}
-		bool operator==(const Iterator& other)
+	public: 
+		ConstBaseIterator(Element* it = nullptr) : it(it) {};
+		~ConstBaseIterator() {};
+		bool operator==(const ConstBaseIterator& other)
 		{
 			return this->it == other.it;
 		}
-		bool operator!=(const Iterator& other)
+		bool operator!=(const ConstBaseIterator& other)
 		{
 			return this->it != other.it;
 		}
-		Iterator& operator++()
-		{
-			it = it->pNext;
-			return *this;
-		}
-		Iterator& operator--()
-		{
-			it = it->pPrev;
-			return *this;
-		}
-		Iterator operator--(int)
-		{
-			Iterator old = *this;
-			it = it->pPrev;
-			return old;
-		}
-		Iterator operator++(int)
-		{
-			Iterator old = it;
-			it = it->pNext;
-			return old;
-		}
 		const int& operator*()const
-		{
-			return it->Data;
-		}
-		int& operator*()
 		{
 			return it->Data;
 		}
 		friend class List;
 	};
-	class ReverseIterator
+
+public:
+	class ConstIterator :public ConstBaseIterator
 	{
-		Element* Temp;
 	public:
-		ReverseIterator(Element* Temp = nullptr) : Temp(Temp){}
+		ConstIterator(Element* it = nullptr) : ConstBaseIterator(it) {}
+		~ConstIterator() {}
+		ConstIterator& operator++()
+		{
+			it = it->pNext;
+			return *this;
+		}
+		ConstIterator& operator--()
+		{
+			it = it->pPrev;
+			return *this;
+		}
+		ConstIterator operator--(int)
+		{
+			ConstIterator old = *this;
+			it = it->pPrev;
+			return old;
+		}
+		ConstIterator operator++(int)
+		{
+			ConstIterator old = it;
+			it = it->pNext;
+			return old;
+		}
+	};
+	class ReverseIterator :public ConstBaseIterator
+	{
+	public:
+		ReverseIterator(Element* Temp = nullptr) : ConstBaseIterator(Temp){}
 		~ReverseIterator(){}
 		// increment decrement
 		ReverseIterator& operator++()
 		{
-			Temp = Temp->pPrev;
+			it = it->pPrev;
 			return *this;
 		}
 		ReverseIterator operator++(int)
 		{
-			ReverseIterator old = Temp;
-			Temp = Temp->pPrev;
+			ReverseIterator old = it;
+			it = it->pPrev;
 			return old;
 		}
 		ReverseIterator& operator--()
 		{
-			Temp = Temp->pNext;
+			it = it->pNext;
 			return *this;
 		}
 		ReverseIterator operator--(int)
 		{
 			ReverseIterator old = *this;
-			Temp=Temp->pNext;
+			it=it->pNext;
 			return old;
 		}
-		// comprasion operators
-		bool operator==(const ReverseIterator& other)const
-		{
-			return this->Temp == other.Temp;
-		}
-		bool operator!=(const ReverseIterator& other)
-		{
-			return this->Temp != other.Temp;
-		}
-		// Dereference operator
-		const int& operator*()const
-		{
-			return Temp->Data;
-		}
-		int& operator*()
-		{
-			return Temp->Data;
-		}
-
 	};
-	ReverseIterator rbegin()
+	ReverseIterator rbegin()const
 	{
 		return Tail;
 	}
-	ReverseIterator rend()
+	ReverseIterator rend()const
 	{
 		return nullptr;
 	}
-	Iterator begin()const
+	ConstIterator begin()const
 	{
 		return Head;
 	}
-	Iterator end()const
+	ConstIterator end()const
 	{
 		return nullptr;
 	}
@@ -172,25 +157,19 @@ public:
 	 // ADDING ELEMENTS
 	void push_front(int Data)
 	{
-		Element* New = new Element(Data);
-		if (!(Head && Tail))Head = Tail = New;
+		if (!(Head && Tail))Head = Tail = new Element(Data);
 		else
 		{
-		    New->pNext = Head;
-			Head->pPrev = New;
-			Head = New;
+			Head = Head->pPrev = new Element(Data, Head);
 		}
 		size++;
 	}
 	void push_back(int Data)
 	{
-		Element* New = new Element(Data);
-		if (!(Head && Tail))Head = Tail = New;
+		if (!(Head && Tail))Head = Tail = new Element(Data);
 		else
 		{
-			New->pPrev = Tail;
-			Tail->pNext = New;
-			Tail = New;
+			Tail = Tail->pNext = new Element(Data, nullptr, Tail);
 		}
 		size++;
 	}
@@ -243,8 +222,7 @@ public:
 			for (int i = num; i < size-1; i++)
 				Temp = Temp->pPrev;
 		}
-		Temp->pPrev->pNext = new Element(Data, Temp, Temp->pPrev);
-		Temp->pPrev = Temp->pPrev->pNext;
+		Temp->pPrev = Temp->pPrev->pNext = new Element(Data, Temp, Temp->pPrev);
 		size++;
 	}
 	void erase(int num)
@@ -287,8 +265,10 @@ public:
 };
 List operator+(const List& left, const List& right)
 {
-	List buffer = left;
-	for (List::Iterator it = right.begin(); it != right.end(); it++)buffer.push_back(*it);
+    List buffer = left;
+	for (List::ConstIterator it = right.begin(); it != right.end(); it++)
+		buffer.push_back(*it);
+
 	return buffer;
 }
 
@@ -303,9 +283,9 @@ void main()
 	list.push_back(1);
 	cout << "Enter number of the element to add: "; cin >> s;
 	list.insert(666, s);
-	list.print();
-	cout << "Enter number of the element to delete: "; cin >> s;
-	list.erase(s);
+	//list.print();
+	//cout << "Enter number of the element to delete: "; cin >> s;
+	//list.erase(s);
 	list.print();
 #endif 
 #ifdef checking2
@@ -319,6 +299,7 @@ void main()
 		cout << *it << tab;
 	}cout << endl;
 #endif 
+#ifdef checking
 	List list1 = { 3,5,8,13,21 };
 	List list2 = { 34, 55, 89 };
 	List list3 = list1 + list2;
@@ -326,4 +307,6 @@ void main()
 	{
 		cout << i << tab;
 	}cout << endl;
+#endif 
+
 }
