@@ -19,14 +19,6 @@ public:
 	{
 		cout << "EDestructor:\t" << this << endl;
 	}
-	int getDATA()const
-	{
-		return Data;
-	}
-	Element* getNELEMENT()
-	{
-		return pNext;
-	}
 	friend class ForwardList;
 	friend class Iterator;
 };
@@ -80,10 +72,6 @@ public:
 	Iterator end()const 
 	{
 		return nullptr;
-	}
-	const int& getHead()const
-	{
-		return Head->Data;
 	}
 	int getsize()const
 	{
